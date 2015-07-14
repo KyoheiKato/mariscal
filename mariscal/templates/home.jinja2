@@ -6,7 +6,7 @@
     <h2>Mocks</h2>
     <ul>
         {% for mock in mocks %}
-            <li><a href="{{ request.route_url('view_mock', mock_id=mock.id) }}">{{ mock.content }}</a></li>
+            <li><a href="{{ request.route_url('view_mock', mock_id=mock.id) }}">{{ mock.content }}</a>{{ mock.user.name }} {{ mock.time.strftime('%Y/%m/%d - %H:%M') }}</li>
         {% endfor %}
     </ul>
 {% endblock %}

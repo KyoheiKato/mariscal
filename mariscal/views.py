@@ -35,7 +35,6 @@ def forbidden_view(request):
 @view_config(route_name='login', renderer='templates/login.jinja2')
 def login_view(request):
     name = ''
-    password = ''
     message = ''
     if 'form.submitted' in request.params:
         name = request.params['username']
@@ -47,7 +46,7 @@ def login_view(request):
 
         message = 'Login Failed'
 
-    return dict(name=name, password=password, message=message, url=request.application_url + '/login')
+    return dict(name=name, message=message, url=request.application_url + '/login')
 
 
 @view_config(route_name='logout', renderer='templates/logout.jinja2')
@@ -75,12 +74,13 @@ def sign_up_view(request):
 @view_config(route_name='view_mock', renderer='templates/mock/view_mock.jinja2', permission='view')
 def view_mock(request):
     mock = Mock.find_by_id(request.matchdict['mock_id'])
-    user = mock.user
+    author = mock.user
+    user = User.find_by_id(authenticated_userid(request))
 
     if 'form.submitted' in request.params:
         return HTTPFound(location=request.route_url('edit_mock', mock_id=mock.id))
 
-    return dict(mock=mock, user=user)
+    return dict(mock=mock, author=author, user=user)
 
 
 @view_config(route_name='new_mock', renderer='templates/mock/new_mock.jinja2', permission='view')
