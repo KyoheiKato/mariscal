@@ -88,8 +88,9 @@ def new_mock(request):
     user = User.find_by_id(authenticated_userid(request))
 
     if 'form.submitted' in request.params:
+        title = request.params['title']
         content = request.params['content']
-        Mock.add_mock(Mock(content, user.id))
+        Mock.add_mock(Mock(title, content, user.id))
 
         return HTTPFound(location=request.route_url('home'))
 
@@ -102,6 +103,7 @@ def edit_mock(request):
     user = User.find_by_id(authenticated_userid(request))
 
     if 'form.submitted' in request.params:
+        mock.title = request.params['title']
         mock.content = request.params['content']
         Mock.add_mock(mock)
 

@@ -65,12 +65,14 @@ class Mock(Base):
     __tablename__ = 'mocks'
     query = DBSession.query_property()
     id = Column(Integer, primary_key=True)
+    title = Column(Text, nullable=False)
     content = Column(Text, nullable=False)
     time = Column(DateTime, nullable=False)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     comments = relationship("Comment", backref="mock")
 
-    def __init__(self, content, user_id):
+    def __init__(self, title, content, user_id):
+        self.title = title
         self.content = content
         self.user_id = user_id
         self.time = datetime.now()

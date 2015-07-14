@@ -3,8 +3,12 @@
 {% block content %}
     <form method="post">
         <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" name="title" placeholder="Title">
+        </div>
+        <div class="form-group">
             <label for="content">Content</label>
-            <textarea name="content" placeholder="mock text" rows="5"></textarea>
+            <textarea class="form-control" name="content" placeholder="mock text" rows="5"></textarea>
         </div>
         <input type="submit" name="form.submitted" class="btn btn-primary" value="Add Mock">
     </form>
