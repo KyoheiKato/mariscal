@@ -2,10 +2,19 @@
 {% block title %}Mock Detail{% endblock %}
 {% block content %}
     <h1>Mock Detail</h1>
-    <h2>Content</h2>
-    <p>{{ mock.content }}</p>
-    <h2>Author</h2>
-    <p>{{ author.name }}</p>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            {{ mock.title }}
+        </div>
+        <div class="panel-body">
+            <div class="content">
+                {{ mock.content }}
+            </div>
+            <div class="info">
+                {{ mock.user.name }}   {{ mock.time.strftime('%Y/%m/%d - %H:%M') }}
+            </div>
+        </div>
+    </div>
     {% if author.name == user.name %}
         <form>
             <input type="submit" name="form.submitted" class="btn btn-primary" value="Edit Mock">

@@ -4,9 +4,23 @@
     <h1>Mariscal</h1>
     <a href="{{ request.route_url('new_mock') }}">Create Mock</a>
     <h2>Mocks</h2>
-    <ul>
-        {% for mock in mocks %}
-            <li><a href="{{ request.route_url('view_mock', mock_id=mock.id) }}">{{ mock.content }}</a>{{ mock.user.name }} {{ mock.time.strftime('%Y/%m/%d - %H:%M') }}</li>
-        {% endfor %}
-    </ul>
+    {% for mock in mocks %}
+        <div class="mock">
+            <a href="{{ request.route_url('view_mock', mock_id=mock.id) }}">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        {{ mock.title }}
+                    </div>
+                    <div class="panel-body">
+                        <div class="content">
+                            {{ mock.content }}
+                        </div>
+                        <div class="info">
+                            {{ mock.user.name }}   {{ mock.time.strftime('%Y/%m/%d - %H:%M') }}
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    {% endfor %}
 {% endblock %}
