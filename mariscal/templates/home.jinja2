@@ -1,0 +1,12 @@
+{% extends "template.jinja2" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    <h1>Mariscal</h1>
+    <a href="{{ request.route_url('new_mock') }}">Create Mock</a>
+    <h2>Mocks</h2>
+    <ul>
+        {% for mock in mocks %}
+            <li><a href="{{ request.route_url('view_mock', mock_id=mock.id) }}">{{ mock.content }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "../template.jinja2" %}
+{% block title %}Mock Detail{% endblock %}
+{% block content %}
+    <h1>Mock Detail</h1>
+    <h2>Content</h2>
+    <p>{{ mock.content }}</p>
+    <h2>Author</h2>
+    <p>{{ user.name }}</p>
+    <form>
+        <input type="submit" name="form.submitted" class="btn btn-primary" value="Edit Mock">
+    </form>
+{% endblock %}

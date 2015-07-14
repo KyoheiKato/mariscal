@@ -1,0 +1,11 @@
+{% extends "../template.jinja2" %}
+{% block title %}Edit Mock{% endblock %}
+{% block content %}
+    <form method="post">
+        <div class="form-group">
+            <label for="content">Content</label>
+            <textarea name="content" placeholder="mock text" rows="5"></textarea>
+        </div>
+        <input type="submit" name="form.submitted" class="btn btn-primary" value="Edit Mock">
+    </form>
+{% endblock %}
