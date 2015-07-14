@@ -1,10 +1,12 @@
 import hashlib
+from datetime import datetime
 
 from sqlalchemy import (
     Column,
     Integer,
     Text,
     ForeignKey,
+    DateTime,
     )
 
 from sqlalchemy.ext.declarative import declarative_base
@@ -64,12 +66,14 @@ class Mock(Base):
     query = DBSession.query_property()
     id = Column(Integer, primary_key=True)
     content = Column(Text, nullable=False)
+    time = Column(DateTime, nullable=False)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     comments = relationship("Comment", backref="mock")
 
     def __init__(self, content, user_id):
         self.content = content
         self.user_id = user_id
+        self.time = datetime.now()
 
     @classmethod
     def find_all(cls):
@@ -89,6 +93,7 @@ class Comment(Base):
     query = DBSession.query_property()
     id = Column(Integer, primary_key=True)
     content = Column(Text, nullable=False)
+    time = Column(DateTime, nullable=False)
     mock_id = Column(Integer, ForeignKey('mocks.id'), nullable=False)
 
     def __init__(self, content):
