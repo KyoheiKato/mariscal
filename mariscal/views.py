@@ -1,6 +1,7 @@
 from .models import (
     User,
     Mock,
+    Comment,
     )
 
 from pyramid.view import (
@@ -79,6 +80,12 @@ def view_mock(request):
 
     if 'form.submitted' in request.params:
         return HTTPFound(location=request.route_url('edit_mock', mock_id=mock.id))
+
+    if 'comment.submitted' in request.params:
+        content = request.params['comment']
+        Comment.add_comment(Comment(content, user.id, mock.id))
+
+        return HTTPFound(location=request.route_url('view_mock', mock_id=mock.id))
 
     return dict(mock=mock, author=author, user=user)
 

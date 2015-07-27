@@ -34,6 +34,7 @@ class User(Base):
     name = Column(Text, nullable=False)
     _password = Column(Text, nullable=False)
     mocks = relationship("Mock", backref="user")
+    comments = relationship("Comment", backref="user")
     group = ['USERS']
 
     def __init__(self, name, password):
@@ -96,10 +97,22 @@ class Comment(Base):
     id = Column(Integer, primary_key=True)
     content = Column(Text, nullable=False)
     time = Column(DateTime, nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     mock_id = Column(Integer, ForeignKey('mocks.id'), nullable=False)
 
-    def __init__(self, content):
+    def __init__(self, content, user_id, mock_id):
         self.content = content
+        self.time = datetime.now()
+        self.user_id = user_id
+        self.mock_id = mock_id
+
+    @classmethod
+    def find_all(cls):
+        return cls.query.all()
+
+    @classmethod
+    def add_comment(cls, comment):
+        DBSession.add(comment)
 
 
 class RootFactory(object):

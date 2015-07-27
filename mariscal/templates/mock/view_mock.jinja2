@@ -20,4 +20,26 @@
             <input type="submit" name="form.submitted" class="btn btn-primary" value="Edit Mock">
         </form>
     {% endif %}
+    <form method="post">
+        <div class="form-group">
+            <label for="comment">Comment</label>
+            <textarea class="form-control" name="comment" placeholder="Comment" rows="5"></textarea>
+        </div>
+        <input type="submit" name="comment.submitted" class="btn btn-success" value="Add Comment">
+    </form>
+    {% for comment in mock.comments %}
+       <div class="panel panel-success">
+            <div class="panel-heading">
+                {{ comment.title }}
+            </div>
+            <div class="panel-body">
+                <div class="content">
+                    {{ comment.content }}
+                </div>
+                <div class="info">
+                    {{ comment.user.name }}   {{ comment.time.strftime('%Y/%m/%d - %H:%M') }}
+                </div>
+            </div>
+       </div>
+    {% endfor %}
 {% endblock %}
