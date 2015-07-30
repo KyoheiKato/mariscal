@@ -7,6 +7,7 @@ from sqlalchemy import (
     Text,
     ForeignKey,
     DateTime,
+    Table,
     )
 
 from sqlalchemy.ext.declarative import declarative_base
@@ -15,6 +16,7 @@ from sqlalchemy.orm import (
     scoped_session,
     sessionmaker,
     relationship,
+    relation,
     )
 
 from zope.sqlalchemy import ZopeTransactionExtension
@@ -26,6 +28,13 @@ from pyramid.security import (
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
 
+user_evaluated_mock_table = Table(
+    'user_evaluated_mocks',
+    Base.metadata,
+    Column('user_id', Integer, ForeignKey('users.id')),
+    Column('mock_id', Integer, ForeignKey('mocks.id')),
+    )
+
 
 class User(Base):
     __tablename__ = 'users'
@@ -33,13 +42,26 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(Text, nullable=False)
     _password = Column(Text, nullable=False)
-    mocks = relationship("Mock", backref="user")
+    create_mocks = relationship("Mock", backref="user")
     comments = relationship("Comment", backref="user")
+    good_mocks = relation('Mock',
+                          order_by='Mock.id',
+                          uselist=True,
+                          backref='good_users',
+                          secondary=user_evaluated_mock_table)
+    bad_mocks = relation('Mock',
+                         order_by='Mock.id',
+                         uselist=True,
+                         backref='bad_users',
+                         secondary=user_evaluated_mock_table)
     group = ['USERS']
 
     def __init__(self, name, password):
         self.name = name
         self.password = password
+
+    def __eq__(self, other):
+        return self.id == other.id
 
     def _set_password(self, password):
         self._password = hashlib.sha1(password.encode('utf-8')).hexdigest()
@@ -47,9 +69,25 @@ class User(Base):
     def verify_password(self, password):
         return self._password == hashlib.sha1(password.encode('utf-8')).hexdigest()
 
+    def add_good_mock(self, mock):
+        self.good_mocks.append(mock)
+        DBSession.add(self)
+
+    def add_bad_mock(self, mock):
+        self.bad_mocks.append(mock)
+        DBSession.add(self)
+
+    def delete_good_mock(self, mock):
+        self.good_mocks.remove(mock)
+        DBSession.add(self)
+
+    def delete_bad_mock(self, mock):
+        self.bad_mocks.remove(mock)
+        DBSession.add(self)
+
     @classmethod
-    def find_by_id(cls, id):
-        return cls.query.filter(cls.id == id).first()
+    def find_by_id(cls, user_id):
+        return cls.query.filter(cls.id == user_id).first()
 
     @classmethod
     def find_by_name(cls, name):
@@ -77,6 +115,9 @@ class Mock(Base):
         self.content = content
         self.user_id = user_id
         self.time = datetime.now()
+
+    def __eq__(self, other):
+        return self.id == other.id
 
     @classmethod
     def find_all(cls):

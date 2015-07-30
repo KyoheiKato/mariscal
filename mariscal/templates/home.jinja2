@@ -6,8 +6,8 @@
     <h2>Mocks</h2>
     {% for mock in mocks %}
         <div class="mock">
-            <a href="{{ request.route_url('view_mock', mock_id=mock.id) }}">
-                <div class="panel panel-primary">
+            <div class="panel panel-primary">
+                <a href="{{ request.route_url('view_mock', mock_id=mock.id) }}">
                     <div class="panel-heading">
                         {{ mock.title }}
                     </div>
@@ -18,9 +18,11 @@
                         <div class="info">
                             {{ mock.user.name }}   {{ mock.time.strftime('%Y/%m/%d - %H:%M') }}
                         </div>
+                        <a class="btn-good {% if user in mock.good_users %}good-active{% endif %}" data-mock="{{ mock.id }}" data-user="{{ user.id }}" data-state="{% if user in mock.good_users %}active{% else %}deactive{% endif %}" data-value="good.submitted"><i class="fa fa-thumbs-o-up"></i>good <span class="user-number">{{ mock.good_users|length }}</span></a>
+                        <a class="btn-bad {% if user in mock.bad_users %}bad-active{% endif %}" data-mock="{{ mock.id }}" data-user="{{ user.id }}" data-state="{% if user in mock.bad_users %}active{% else %}deactive{% endif %}" data-value="bad.submitted"><i class="fa fa-thumbs-o-down"></i>bad <span class="user-number">{{ mock.bad_users|length }}</span></a>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
         </div>
     {% endfor %}
 {% endblock %}

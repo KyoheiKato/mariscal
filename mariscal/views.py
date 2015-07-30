@@ -20,12 +20,40 @@ from pyramid.httpexceptions import (
     )
 
 
-@view_config(route_name='home', renderer='templates/home.jinja2', permission='view')
+@view_config(route_name='home', request_method='GET', renderer='templates/home.jinja2', permission='view')
 def home_view(request):
     user = User.find_by_id(authenticated_userid(request))
     mocks = Mock.find_all()
 
     return dict(user=user, mocks=mocks)
+
+
+@view_config(route_name='home', request_method='POST', permission='view', xhr=True, renderer="json")
+def evaluate_mock(request):
+    mock = Mock.find_by_id(request.POST['mock'])
+    user = User.find_by_id(request.POST['user'])
+    state = request.POST['state']
+    value = request.POST['value']
+
+    if value == 'good.submitted':
+        if state == 'active':
+            user.delete_good_mock(mock)
+        elif state == 'deactive':
+            user.add_good_mock(mock)
+        state = user in mock.good_users
+    elif value == 'bad.submitted':
+        if state == 'active':
+            user.delete_bad_mock(mock)
+        elif state == 'deactive':
+            user.add_bad_mock(mock)
+        state = user in mock.bad_users
+
+    if value == 'good.submitted':
+        return dict(number=len(mock.good_users), state=state)
+    elif value == 'bad.submitted':
+        return dict(number=len(mock.bad_users), state=state)
+    else:
+        return dict()
 
 
 @forbidden_view_config(renderer='templates/login.jinja2')
