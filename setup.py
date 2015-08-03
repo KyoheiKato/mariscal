@@ -18,7 +18,8 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
     'pyramid_jinja2',
-    'docutils',
+    'pyramid_celery',
+    'tweepy',
     ]
 
 setup(name='mariscal',
