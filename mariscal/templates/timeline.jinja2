@@ -1,0 +1,17 @@
+{% extends "template.jinja2" %}
+{% block title %}Timeline{% endblock %}
+{% block content %}
+    <h2>Timeline</h2>
+    {% for tweet in tweets %}
+        <div class="tweet">
+            <div class="panel panel-mock">
+                <div class="panel-heading">
+                    {{ tweet.author.name }}
+                </div>
+                <div class="panel-body">
+                    {{ tweet.text }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
