@@ -28,8 +28,15 @@ from pyramid.security import (
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
 
-user_evaluated_mock_table = Table(
-    'user_evaluated_mocks',
+user_good_mock_table = Table(
+    'user_good_mocks',
+    Base.metadata,
+    Column('user_id', Integer, ForeignKey('users.id')),
+    Column('mock_id', Integer, ForeignKey('mocks.id')),
+    )
+
+user_bad_mock_table = Table(
+    'user_bad_mocks',
     Base.metadata,
     Column('user_id', Integer, ForeignKey('users.id')),
     Column('mock_id', Integer, ForeignKey('mocks.id')),
@@ -48,12 +55,12 @@ class User(Base):
                           order_by='Mock.id',
                           uselist=True,
                           backref='good_users',
-                          secondary=user_evaluated_mock_table)
+                          secondary=user_good_mock_table)
     bad_mocks = relation('Mock',
                          order_by='Mock.id',
                          uselist=True,
                          backref='bad_users',
-                         secondary=user_evaluated_mock_table)
+                         secondary=user_bad_mock_table)
     group = ['USERS']
 
     def __init__(self, name, password):
