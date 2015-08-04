@@ -1,0 +1,55 @@
+/**
+ *    Colors
+ */
+body {
+  margin-top: 50px; }
+
+#wrap-content {
+  padding-left: 225px; }
+  #wrap-content .navbar .container-fluid {
+    padding: 0 40px; }
+  #wrap-content .side-nav {
+    position: fixed;
+    top: 51px;
+    left: 225px;
+    width: 225px;
+    margin-left: -225px;
+    border: none;
+    border-radius: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #B6B6B6;
+    bottom: 0;
+    padding-bottom: 40px; }
+    #wrap-content .side-nav li a {
+      width: 225px;
+      color: #9E9E9E; }
+      #wrap-content .side-nav li a:hover, #wrap-content .side-nav li a:focus {
+        outline: none;
+        color: #FFFFFF;
+        background-color: #FFC107; }
+
+#main-content {
+  padding: 30px; }
+  #main-content .panel-heading {
+    color: white; }
+  #main-content .panel-mock {
+    border-color: #F26964; }
+    #main-content .panel-mock .panel-heading {
+      background-color: #F26964; }
+  #main-content .panel-tweet {
+    border-color: #1253A4; }
+    #main-content .panel-tweet .panel-heading {
+      background-color: #1253A4; }
+  #main-content .panel-comment {
+    border-color: #E9872E; }
+    #main-content .panel-comment .panel-heading {
+      background-color: #E9872E; }
+  #main-content .btn-eval {
+    color: #727272; }
+  #main-content .good-active {
+    color: #4CAF50; }
+  #main-content .bad-active {
+    color: #F44336; }
+
+/*# sourceMappingURL=mariscal.css.map */

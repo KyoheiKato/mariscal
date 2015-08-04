@@ -2,3 +2,4 @@
 mariscal.egg-info
 *.sqlite
 secret.ini
+mariscal/static/css/*.map

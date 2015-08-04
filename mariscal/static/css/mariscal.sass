@@ -1,0 +1,103 @@
+/**
+ *    Colors
+ **/
+
+$primary-color: #3F51B5
+$accent-color: #FFC107
+$dark-primary-color: rgba(17, 15, 31, 0.97)
+$light-primary-color: #C5CAE9
+$text-icon-color: #FFFFFF
+$text-color: #212121
+$secondary-text-color: #727272
+$divider-color: #B6B6B6
+
+$red-500: #F44336
+$pink-500: #E91E63
+$purple-500: #9C27B0
+$indigo-500: #3F51B5
+$blue-500: #2196F3
+$cyan-500: #00BCD4
+$teal-500: #009688
+$green-500: #4CAF50
+$lightgreen-500: #8BC34A
+$lime-500: #CDDC39
+$yellow-500: #FFEB3B
+$amber-500: #FFC107
+$orange-500: #FF9800
+$deeporange-500: #FF5722
+$brown-500: #795548
+$gray-500: #9E9E9E
+$bluegray-500: #607D8B
+
+$crusta: #F26964
+$dandelion: #E9872E
+$egyptian-blue: #1253A4
+
+body
+  margin-top: 50px
+
+#wrap-content
+  padding-left: 225px
+
+  .navbar
+    .container-fluid
+      padding: 0 40px
+
+  .side-nav
+    position: fixed
+    top: 51px
+    left: 225px
+    width: 225px
+    margin-left: -225px
+    border: none
+    border-radius: 0
+    overflow-x: hidden
+    overflow-y: auto
+    background-color: $divider-color
+    bottom: 0
+    padding-bottom: 40px
+
+    li
+      a
+        width: 225px
+        color: $gray-500
+
+        &:hover, &:focus
+          outline: none
+          color: $text-icon-color
+          background-color: $accent-color
+
+#main-content
+  padding: 30px
+
+  .panel-heading
+    color: white
+
+  .panel-mock
+    border-color: $crusta
+    .panel-heading
+      background-color: $crusta
+
+  .panel-tweet
+    border-color: $egyptian-blue
+    .panel-heading
+      background-color: $egyptian-blue
+
+  .panel-comment
+    border-color: $dandelion
+    .panel-heading
+      background-color: $dandelion
+
+  .btn-eval
+    color: $secondary-text-color
+
+  .good-active
+    color: $green-500
+
+  .bad-active
+    color: $red-500
+
+
+
+@media (max-width: 770px)
+@media (max-width: 640px)
