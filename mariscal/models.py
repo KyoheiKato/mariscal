@@ -51,6 +51,8 @@ class User(Base):
     _password = Column(Text, nullable=False)
     create_mocks = relationship("Mock", backref="user")
     comments = relationship("Comment", backref="user")
+    twitter_account_id = Column(Integer, ForeignKey('twitter_accounts.id'))
+    twitter_account = relationship("TwitterAccount")
     good_mocks = relation('Mock',
                           order_by='Mock.id',
                           uselist=True,
@@ -161,6 +163,23 @@ class Comment(Base):
     @classmethod
     def add_comment(cls, comment):
         DBSession.add(comment)
+
+
+class TwitterAccount(Base):
+    __tablename__ = 'twitter_accounts'
+    query = DBSession.query_property()
+    id = Column(Integer, primary_key=True)
+    account_id = Column(Text, nullable=False)
+    _account_password = Column(Text, nullable=False)
+
+    def __init__(self, account_id, account_password):
+        self.account_id = account_id
+        self.account_password = account_password
+
+    def _set_account_password(self, account_password):
+        self._account_password = hashlib.sha1(account_password.encode('utf-8')).hexdigest()
+
+    account_password = property(fset=_set_account_password)
 
 
 class RootFactory(object):
