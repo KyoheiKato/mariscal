@@ -99,7 +99,7 @@ class MockView(object):
             return HTTPFound(location=self.request.route_url('edit_mock', mock_id=mock.id))
 
         if 'comment.submitted' in self.request.params:
-            content = self.request.params['comment']
+            content = self.request.params.get('comment')
             Comment.add_comment(Comment(content, self.user.id, mock.id))
 
             return HTTPFound(location=self.request.route_url('view_mock', mock_id=mock.id))
@@ -123,8 +123,8 @@ class MockView(object):
         mock = Mock.find_by_id(self.request.matchdict['mock_id'])
 
         if 'form.submitted' in self.request.params:
-            mock.title = self.request.params['title']
-            mock.content = self.request.params['content']
+            mock.title = self.request.params.get('title')
+            mock.content = self.request.params.get('comment')
             Mock.add_mock(mock)
 
             return HTTPFound(location=self.request.route_url('view_mock', mock_id=mock.id))
