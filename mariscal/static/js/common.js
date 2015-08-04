@@ -1,36 +1,43 @@
 $(function() {
     var $goodButton = $('.btn-good');
     var $badButton = $('.btn-bad');
+    var $tweetButton = $('.btn-tweet');
     $goodButton.on('click', function() {
-        valueAjax($goodButton).done(function (result) {
-            console.log(result);
+        var $select = $(this);
+        valueAjax($(this)).done(function(result) {
             if (result['state']) {
-                $goodButton.attr('class', 'good-active');
-                $goodButton.attr('data-state', 'active');
+                $select.addClass('good-active');
+                $select.attr('data-state', 'active');
             } else {
-                $goodButton.removeAttr('class');
-                $goodButton.attr('data-state', 'deactive');
+                $select.removeClass('good-active');
+                $select.removeAttr('data-state');
             }
-            $goodButton.find('span.user-number').text(result['number']);
+            $select.find('span.user-number').text(result['number']);
         });
     });
     $badButton.on('click', function () {
-        valueAjax($badButton).done(function (result) {
+        var $select = $(this);
+        valueAjax($(this)).done(function(result) {
             if (result['state']) {
-                $badButton.attr('class', 'bad-active');
-                $badButton.attr('data-state', 'active');
+                $select.addClass('bad-active');
+                $select.attr('data-state', 'active');
             } else {
-                $badButton.removeAttr('class');
-                $badButton.attr('data-state', 'deactive');
+                $select.removeClass('bad-active');
+                $select.removeAttr('data-state');
             }
-            $badButton.find('span.user-number').text(result['number']);
+            $select.find('span.user-number').text(result['number']);
         })
-    })
+    });
+    $tweetButton.on('click', function() {
+        tweetAjax($tweetButton).done(function(result) {
+            if (result == 'OK') window.alert('ツイートしました。')
+        })
+    });
 });
 
 var valueAjax = function($valueButton) {
     return $.ajax({
-        url: '/',
+        url: '/ajax/evaluate',
         type: 'POST',
         dataType: 'json',
         data: {
@@ -38,6 +45,16 @@ var valueAjax = function($valueButton) {
             user: $valueButton.attr('data-user'),
             state: $valueButton.attr('data-state'),
             value: $valueButton.attr('data-value')
+        }
+    })
+};
+
+var tweetAjax = function($tweetButton) {
+    return $.ajax({
+        url: '/ajax/tweet',
+        type: 'POST',
+        data: {
+            text: $tweetButton.attr('data-value')
         }
     })
 };
