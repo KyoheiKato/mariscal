@@ -8,7 +8,21 @@
                 <div class="panel-heading">
                     <i class="fa fa-volume-up fa-5x"></i> Mocks
                 </div>
-                <div class="panel-footer"></div>
+                <div class="panel-body">
+                    {% for mock in mocks  %}
+                        <div class="well">
+                            <p class="title">{{ mock.title }}</p>
+                            <p class="content">{{ mock.content }}</p>
+                            <p class="author">{{ mock.user.name }}</p>
+                            <p class="time">{{ mock.time.strftime('%Y/%m/%d - %H:%M') }}</p>
+                            <div class="{{ mock.id }}">
+                                <a class="btn-eval btn-good {% if user in mock.good_users %}good-active{% endif %}" role="button" data-mock="{{ mock.id }}" data-user="{{ user.id }}" data-state="{% if user in mock.good_users %}active{% else %}deactive{% endif %}" data-value="good.submitted"><i class="fa fa-thumbs-o-up"></i>good <span class="user-number">{{ mock.good_users|length }}</span></a>
+                                <a class="btn-eval btn-bad {% if user in mock.bad_users %}bad-active{% endif %}" role="button" data-mock="{{ mock.id }}" data-user="{{ user.id }}" data-state="{% if user in mock.bad_users %}active{% else %}deactive{% endif %}" data-value="bad.submitted"><i class="fa fa-thumbs-o-down"></i>bad <span class="user-number">{{ mock.bad_users|length }}</span></a>
+                                <a class="btn-tweet" role="button" data-value="{{ mock.content }}">ツイートする</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
         <div class="col-md-4">
@@ -16,7 +30,14 @@
                 <div class="panel-heading">
                     <i class="fa fa-twitter fa-5x"></i> Tweets
                 </div>
-                <div class="panel-footer"></div>
+                <div class="panel-body">
+                    {% for tweet in tweets  %}
+                        <div class="well">
+                            <p class="user">{{ tweet.author.name }}</p>
+                            <p class="content">{{ tweet.text }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
         <div class="col-md-4">
@@ -24,7 +45,16 @@
                 <div class="panel-heading">
                     <i class="fa fa-comments fa-5x"></i> Comments
                 </div>
-                <div class="panel-footer"></div>
+                <div class="panel-body">
+                    {% for comment in comments %}
+                        <div class="well">
+                            <p class="title">{{ comment.title }}</p>
+                            <p class="content">{{ comment.content }}</p>
+                            <p class="author">{{ comment.user.name }}</p>
+                            <p class="time">{{ comment.time.strftime('%Y/%m/%d - %H:%M') }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>

@@ -36,8 +36,10 @@ class HomeView(object):
     def home_view(self):
         user = User.find_by_id(authenticated_userid(self.request))
         mocks = Mock.find_all()
+        tweets = TweetUtil().get_tweets()
+        comments = Comment.find_all()
 
-        return dict(user=user, mocks=mocks)
+        return dict(user=user, tweets=tweets, mocks=mocks, comments=comments)
 
     @view_config(route_name='login', request_method='GET', renderer='templates/login.jinja2')
     def login_get(self):
