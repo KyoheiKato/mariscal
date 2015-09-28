@@ -6,24 +6,26 @@
         {% for mock in mocks %}
             <div class="col-md-4">
                 <div class="mock">
-                    <div class="panel panel-tweet">
-                        <div class="panel-heading">
-                            {{ mock.title }}
+                    <a href="{{ request.route_url('view_mock', mock_id=mock.id) }}">
+                        <div class="panel panel-tweet">
+                            <div class="panel-heading">
+                                {{ mock.title }}
+                            </div>
+                            <div class="panel-body">
+                                <div class="content">
+                                    {{ mock.content }}
+                                </div>
+                                <div class="info">
+                                    {{ mock.user.name }}   {{ mock.time.strftime('%Y/%m/%d - %H:%M') }}
+                                </div>
+                                <div class="{{ mock.id }}">
+                                    <a class="btn-eval btn-good {% if user in mock.good_users %}good-active{% endif %}" role="button" data-mock="{{ mock.id }}" data-user="{{ user.id }}" data-state="{% if user in mock.good_users %}active{% else %}deactive{% endif %}" data-value="good.submitted"><i class="fa fa-thumbs-o-up"></i>good <span class="user-number">{{ mock.good_users|length }}</span></a>
+                                    <a class="btn-eval btn-bad {% if user in mock.bad_users %}bad-active{% endif %}" role="button" data-mock="{{ mock.id }}" data-user="{{ user.id }}" data-state="{% if user in mock.bad_users %}active{% else %}deactive{% endif %}" data-value="bad.submitted"><i class="fa fa-thumbs-o-down"></i>bad <span class="user-number">{{ mock.bad_users|length }}</span></a>
+                                    <a class="btn-tweet" role="button" data-value="{{ mock.content }}">ツイートする</a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="panel-body">
-                            <div class="content">
-                                {{ mock.content }}
-                            </div>
-                            <div class="info">
-                                {{ mock.user.name }}   {{ mock.time.strftime('%Y/%m/%d - %H:%M') }}
-                            </div>
-                            <div class="{{ mock.id }}">
-                                <a class="btn-eval btn-good {% if user in mock.good_users %}good-active{% endif %}" role="button" data-mock="{{ mock.id }}" data-user="{{ user.id }}" data-state="{% if user in mock.good_users %}active{% else %}deactive{% endif %}" data-value="good.submitted"><i class="fa fa-thumbs-o-up"></i>good <span class="user-number">{{ mock.good_users|length }}</span></a>
-                                <a class="btn-eval btn-bad {% if user in mock.bad_users %}bad-active{% endif %}" role="button" data-mock="{{ mock.id }}" data-user="{{ user.id }}" data-state="{% if user in mock.bad_users %}active{% else %}deactive{% endif %}" data-value="bad.submitted"><i class="fa fa-thumbs-o-down"></i>bad <span class="user-number">{{ mock.bad_users|length }}</span></a>
-                                <a class="btn-tweet" role="button" data-value="{{ mock.content }}">ツイートする</a>
-                            </div>
-                        </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         {% endfor %}
