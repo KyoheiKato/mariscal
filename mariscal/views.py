@@ -151,40 +151,38 @@ class AjaxAPI(object):
     def __init__(self, request):
         self.request = request
 
-    @view_config(route_name='ajax_api', request_method='POST', permission='view', xhr=True, renderer="json")
-    def ajax_post(self):
-        ajax_id = self.request.matchdict.get('ajax_id')
+    @view_config(route_name='tweet_post_api', request_method='POST', permission='view', xhr=True, renderer="json")
+    def tweet_post(self):
+        tweet_util = TweetUtil()
+        tweet_util.post_tweet(self.request.params.get('text'))
 
-        if ajax_id == 'evaluate':
-            mock = Mock.find_by_id(self.request.params.get('mock'))
-            user = User.find_by_id(self.request.params.get('user'))
-            state = self.request.params.get('state')
-            value = self.request.params.get('value')
+        return Response('OK')
 
-            print(mock.id)
+    @view_config(route_name='good_api', request_method='POST', permission='view', xhr=True, renderer="json")
+    def good_post(self):
+        mock = Mock.find_by_id(self.request.params.get('mock'))
+        user = User.find_by_id(self.request.params.get('user'))
+        state = self.request.params.get('state')
 
-            if value == 'good.submitted':
-                if state == 'active':
-                    user.delete_good_mock(mock)
-                else:
-                    user.add_good_mock(mock)
-                state = user in mock.good_users
-            elif value == 'bad.submitted':
-                if state == 'active':
-                    user.delete_bad_mock(mock)
-                else:
-                    user.add_bad_mock(mock)
-                state = user in mock.bad_users
+        if state == 'active':
+            user.delete_good_mock(mock)
+        else:
+            user.add_good_mock(mock)
+        state = user in mock.good_users
 
-            if value == 'good.submitted':
-                return dict(number=len(mock.good_users), state=state)
-            elif value == 'bad.submitted':
-                return dict(number=len(mock.bad_users), state=state)
-            else:
-                return dict()
+        return dict(number=len(mock.good_users), state=state)
 
-        if ajax_id == 'tweet':
-            tweet_util = TweetUtil()
-            tweet_util.post_tweet(self.request.params.get('text'))
+    @view_config(route_name='bad_api', request_method='POST', permission='view', xhr=True, renderer="json")
+    def bad_post(self):
+        mock = Mock.find_by_id(self.request.params.get('mock'))
+        user = User.find_by_id(self.request.params.get('user'))
+        state = self.request.params.get('state')
 
-            return Response('OK')
+        if state == 'active':
+            user.delete_bad_mock(mock)
+        else:
+            user.add_bad_mock(mock)
+        state = user in mock.bad_users
+
+        return dict(number=len(mock.bad_users), state=state)
+

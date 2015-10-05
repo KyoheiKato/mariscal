@@ -57,7 +57,9 @@ def main(global_config, **settings):
     config.add_route('new_mock', '/mock/new_mock')
     config.add_route('view_mock', '/mock/{mock_id}')
     config.add_route('edit_mock', '/mock/{mock_id}/edit')
-    config.add_route('ajax_api', '/ajax/{ajax_id}')
+    config.add_route('tweet_post_api', '/ajax/tweet_post')
+    config.add_route('good_api', '/ajax/good_post')
+    config.add_route('bad_api', '/ajax/bad_post')
 
     config.scan()
 

@@ -43,8 +43,7 @@ var valueAjax = function($valueButton) {
         data: {
             mock: $valueButton.attr('data-mock'),
             user: $valueButton.attr('data-user'),
-            state: $valueButton.attr('data-state'),
-            value: $valueButton.attr('data-value')
+            state: $valueButton.attr('data-state')
         }
     })
 };
