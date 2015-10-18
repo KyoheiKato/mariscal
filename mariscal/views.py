@@ -24,7 +24,7 @@ from pyramid.response import Response
 from .tweet import *
 
 
-class HomeView(object):
+class AuthenticateView(object):
     def __init__(self, request):
         self.request = request
 
@@ -32,21 +32,12 @@ class HomeView(object):
     def forbidden_view(self):
         return HTTPFound(location=self.request.route_url('login'))
 
-    @view_config(route_name='home', request_method='GET', renderer='templates/home.jinja2', permission='view')
-    def home_view(self):
-        user = User.find_by_id(authenticated_userid(self.request))
-        mocks = Mock.find_all()
-        tweets = TweetUtil().get_tweets()
-        comments = Comment.find_all()
-
-        return dict(user=user, tweets=tweets, mocks=mocks, comments=comments)
-
     @view_config(route_name='login', request_method='GET', renderer='templates/login.jinja2')
-    def login_get(self):
+    def login_get_view(self):
         return dict()
 
     @view_config(route_name='login', request_method='POST', renderer='templates/login.jinja2')
-    def login_post(self):
+    def login_post_view(self):
         name = self.request.params.get('username')
         password = self.request.params.get('password')
         user = User.find_by_name(name)
@@ -62,24 +53,21 @@ class HomeView(object):
     @view_config(route_name='logout', request_method='GET', renderer='templates/logout.jinja2')
     def logout_view(self):
         headers = forget(self.request)
-        return HTTPFound(location=self.request.route_url('home'), headers=headers)
+        return HTTPFound(location=self.request.route_url('login'), headers=headers)
 
-    @view_config(route_name='sign_up', request_method='GET', renderer='templates/sign_up.jinja2')
-    def sign_up_get(self):
-        return dict()
 
-    @view_config(route_name='sign_up', request_method='POST', renderer='templates/sign_up.jinja2')
-    def sign_up_post(self):
-        name = self.request.params.get('username')
-        password = self.request.params.get('password')
-        if User.find_by_name(name) is None:
-            User.add_user(User(name, password))
+class UserView(object):
+    def __init__(self, request):
+        self.request = request
 
-            return HTTPFound(location=self.request.route_url('login'))
+    @view_config(route_name='home', request_method='GET', renderer='templates/home.jinja2', permission='view')
+    def home_view(self):
+        user = User.find_by_id(authenticated_userid(self.request))
+        mocks = Mock.find_all()
+        tweets = TweetUtil().get_tweets()
+        comments = Comment.find_all()
 
-        message = 'Sign up failed'
-
-        return dict(message=message)
+        return dict(user=user, tweets=tweets, mocks=mocks, comments=comments)
 
 
 class MockView(object):
