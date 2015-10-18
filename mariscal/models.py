@@ -95,7 +95,7 @@ class User(Base):
         DBSession.add(self)
 
     def is_twitter_account_exist(self):
-        return not self.twitter_access_token and not self.twitter_access_token_secret
+        return self.twitter_access_token and self.twitter_access_token_secret
 
     @classmethod
     def find_by_id(cls, user_id):
