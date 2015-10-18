@@ -63,11 +63,16 @@ class UserView(object):
     @view_config(route_name='home', request_method='GET', renderer='templates/home.jinja2', permission='view')
     def home_view(self):
         user = User.find_by_id(authenticated_userid(self.request))
-        mocks = Mock.find_all()
-        tweets = TweetUtil().get_tweets()
-        comments = Comment.find_all()
 
-        return dict(user=user, tweets=tweets, mocks=mocks, comments=comments)
+        if user.is_twitter_account_exist():
+            mocks = Mock.find_all()
+            tweets = TweetUtil().get_tweets()
+            comments = Comment.find_all()
+
+            return dict(user=user, tweets=tweets, mocks=mocks, comments=comments)
+
+        else:
+            return dict(user=user)
 
 
 class MockView(object):

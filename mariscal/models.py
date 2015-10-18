@@ -51,8 +51,8 @@ class User(Base):
     _password = Column(Text, nullable=False)
     create_mocks = relationship("Mock", backref="user")
     comments = relationship("Comment", backref="user")
-    twitter_account_id = Column(Integer, ForeignKey('twitter_accounts.id'))
-    twitter_account = relationship("TwitterAccount")
+    twitter_access_token = Column(Text)
+    twitter_access_token_secret = Column(Text)
     good_mocks = relation('Mock',
                           order_by='Mock.id',
                           uselist=True,
@@ -93,6 +93,9 @@ class User(Base):
     def delete_bad_mock(self, mock):
         self.bad_mocks.remove(mock)
         DBSession.add(self)
+
+    def is_twitter_account_exist(self):
+        return not self.twitter_access_token and not self.twitter_access_token_secret
 
     @classmethod
     def find_by_id(cls, user_id):
