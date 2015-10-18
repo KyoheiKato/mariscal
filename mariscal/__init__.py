@@ -13,7 +13,7 @@ from .security import groupfinder
 from .models import (
     DBSession,
     Base,
-    RootFactory
+    RootFactory,
     )
 
 
