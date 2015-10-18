@@ -51,7 +51,6 @@ def main(global_config, **settings):
     config.add_route('home', '/')
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
-    config.add_route('sign_up', '/sign_up')
     config.add_route('tweets', '/tweets')
     config.add_route('mocks', '/mocks')
     config.add_route('new_mock', '/mock/new_mock')
