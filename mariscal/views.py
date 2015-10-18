@@ -59,6 +59,7 @@ class AuthenticateView(object):
 class UserView(object):
     def __init__(self, request):
         self.request = request
+        self.tweet_util = TweetUtil()
 
     @view_config(route_name='home', request_method='GET', renderer='templates/home.jinja2', permission='view')
     def home_view(self):
@@ -72,7 +73,9 @@ class UserView(object):
             return dict(user=user, tweets=tweets, mocks=mocks, comments=comments)
 
         else:
-            return dict(user=user)
+            authenticate_url = self.tweet_util.get_authenticate_url()
+
+            return dict(user=user, authenticate_url=authenticate_url)
 
 
 class MockView(object):
