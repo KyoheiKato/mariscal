@@ -5,7 +5,6 @@ from pyramid.threadlocal import get_current_registry
 
 class TweetUtil:
     _session = dict()
-    _api = None
 
     def __init__(self, user):
         settings = get_current_registry().settings
