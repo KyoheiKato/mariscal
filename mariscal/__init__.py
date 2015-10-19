@@ -52,6 +52,7 @@ def main(global_config, **settings):
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
     config.add_route('tweets', '/tweets')
+    config.add_route('pin_auth', '/tweet/pin_auth')
     config.add_route('mocks', '/mocks')
     config.add_route('new_mock', '/mock/new_mock')
     config.add_route('view_mock', '/mock/{mock_id}')

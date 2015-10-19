@@ -1,0 +1,12 @@
+{% extends "../template.jinja2" %}
+{% block title %}Pin Auth{% endblock %}
+{% block content %}
+    <H2>PINコードを入力してください</H2>
+    <form method="POST">
+        <div class="form-group">
+            <label class="control-label" for="pin-code">PINコード</label>
+            <input class="form-control" name="pin-code">
+        </div>
+        <input class="btn btn-lg btn-success" type="submit" name="pin.submitted" value="送信">
+    </form>
+{% endblock %}

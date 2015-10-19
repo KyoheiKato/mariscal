@@ -97,6 +97,10 @@ class User(Base):
     def is_twitter_account_exist(self):
         return self.twitter_access_token and self.twitter_access_token_secret
 
+    def set_twitter_access_token(self, token):
+        self.twitter_access_token = token[0]
+        self.twitter_access_token_secret = token[1]
+
     @classmethod
     def find_by_id(cls, user_id):
         return cls.query.filter(cls.id == user_id).first()

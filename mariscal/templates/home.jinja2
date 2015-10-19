@@ -2,7 +2,7 @@
 {% block title %}Home{% endblock %}
 {% block content %}
     <h1>Home</h1>
-    {% if mocks %}
+    {% if is_authenticated %}
         <div class="row">
             <div class="col-md-4">
                 <div class="panel panel-tweet">
@@ -61,6 +61,6 @@
         </div>
     {% else %}
         <h2>Twitterアカウントを認証してください</h2>
-        <a href="{{ authenticate_url }}" class="btn btn-lg btn-success" target="_blank">認証する</a>
+        <a href="{{ authenticate_url }}" class="btn btn-lg btn-success btn-auth" target="_blank">認証する</a>
     {% endif %}
 {% endblock %}

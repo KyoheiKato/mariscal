@@ -59,23 +59,24 @@ class AuthenticateView(object):
 class UserView(object):
     def __init__(self, request):
         self.request = request
-        self.tweet_util = TweetUtil()
+        self.user = User.find_by_id(authenticated_userid(self.request))
+        self.tweet_util = TweetUtil(self.user)
 
     @view_config(route_name='home', request_method='GET', renderer='templates/home.jinja2', permission='view')
     def home_view(self):
-        user = User.find_by_id(authenticated_userid(self.request))
+        is_authenticated = self.user.is_twitter_account_exist()
 
-        if user.is_twitter_account_exist():
+        if is_authenticated:
             mocks = Mock.find_all()
-            tweets = TweetUtil().get_tweets()
+            tweets = self.tweet_util.get_tweets()
             comments = Comment.find_all()
 
-            return dict(user=user, tweets=tweets, mocks=mocks, comments=comments)
+            return dict(user=self.user, is_authenticated=is_authenticated, tweets=tweets, mocks=mocks, comments=comments)
 
         else:
             authenticate_url = self.tweet_util.get_authenticate_url()
 
-            return dict(user=user, authenticate_url=authenticate_url)
+            return dict(user=self.user, is_authenticated=is_authenticated, authenticate_url=authenticate_url)
 
 
 class MockView(object):
@@ -134,7 +135,22 @@ class TweetView(object):
     def __init__(self, request):
         self.request = request
         self.user = User.find_by_id(authenticated_userid(self.request))
-        self.tweet_util = TweetUtil()
+        self.tweet_util = TweetUtil(self.user)
+
+    @view_config(route_name='pin_auth', request_method='GET', permission='view', renderer='templates/tweet/pin_auth.jinja2')
+    def pin_auth_get_view(self):
+        return dict(user=self.user)
+
+    @view_config(route_name='pin_auth', request_method='POST', permission='view', renderer='templates/tweet/pin_auth.jinja2')
+    def pin_auth_post_view(self):
+        if 'pin.submitted' in self.request.params:
+            pin_code = self.request.params.get('pin-code')
+            self.tweet_util.auth_twitter_access_token(pin_code, self.user)
+
+            return HTTPFound(location=self.request.route_url('home'))
+
+        # TODO: error handling
+        return dict(user=self.user)
 
     @view_config(route_name='tweets', request_method='GET', permission='view', renderer='templates/timeline.jinja2')
     def view_mock_list(self):
