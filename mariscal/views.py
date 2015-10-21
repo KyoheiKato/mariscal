@@ -60,7 +60,7 @@ class UserView(object):
     def __init__(self, request):
         self.request = request
         self.user = User.find_by_id(authenticated_userid(self.request))
-        self.tweet_util = TweetUtil(self.user)
+        self.tweet_util = TweetUtil(self.user, request)
 
     @view_config(route_name='home', request_method='GET', renderer='templates/home.jinja2', permission='view')
     def home_view(self):
@@ -135,22 +135,15 @@ class TweetView(object):
     def __init__(self, request):
         self.request = request
         self.user = User.find_by_id(authenticated_userid(self.request))
-        self.tweet_util = TweetUtil(self.user)
+        self.tweet_util = TweetUtil(self.user, request)
 
-    @view_config(route_name='pin_auth', request_method='GET', permission='view', renderer='templates/tweet/pin_auth.jinja2')
-    def pin_auth_get_view(self):
-        return dict(user=self.user)
+    @view_config(route_name='token_auth', request_method='GET', permission='view', renderer='templates/tweet/token_auth.jinja2')
+    def token_auth_view(self):
+        oauth_token = self.request.params.get('oauth_token')
+        oauth_verifier = self.request.params.get('oauth_verifier')
+        self.tweet_util.auth_twitter_access_token(oauth_token, oauth_verifier, self.user)
 
-    @view_config(route_name='pin_auth', request_method='POST', permission='view', renderer='templates/tweet/pin_auth.jinja2')
-    def pin_auth_post_view(self):
-        if 'pin.submitted' in self.request.params:
-            pin_code = self.request.params.get('pin-code')
-            self.tweet_util.auth_twitter_access_token(pin_code, self.user)
-
-            return HTTPFound(location=self.request.route_url('home'))
-
-        # TODO: error handling
-        return dict(user=self.user)
+        return HTTPFound(location=self.request.route_url('home'))
 
     @view_config(route_name='tweets', request_method='GET', permission='view', renderer='templates/timeline.jinja2')
     def view_mock_list(self):
@@ -162,10 +155,11 @@ class TweetView(object):
 class AjaxAPI(object):
     def __init__(self, request):
         self.request = request
+        self.user = User.find_by_id(authenticated_userid(request))
 
     @view_config(route_name='tweet_post_api', request_method='POST', permission='view', xhr=True, renderer="json")
     def tweet_post(self):
-        tweet_util = TweetUtil()
+        tweet_util = TweetUtil(self.user, self.request)
         tweet_util.post_tweet(self.request.params.get('text'))
 
         return Response('OK')

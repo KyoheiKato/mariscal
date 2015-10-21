@@ -57,10 +57,3 @@ var tweetAjax = function($tweetButton) {
         }
     })
 };
-
-$(function () {
-    var $authButton = $('.btn-auth');
-    $authButton.on('click', function(){
-        window.location.href = '/tweet/pin_auth'
-    });
-});
