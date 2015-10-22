@@ -60,7 +60,7 @@ class UserView(object):
     def __init__(self, request):
         self.request = request
         self.user = User.find_by_id(authenticated_userid(self.request))
-        self.tweet_util = TweetUtil(self.user, request)
+        self.tweet_util = TweetUtil(self.user)
 
     @view_config(route_name='home', request_method='GET', renderer='templates/home.jinja2', permission='view')
     def home_view(self):
@@ -84,7 +84,7 @@ class MockView(object):
         self.request = request
         self.user = User.find_by_id(authenticated_userid(self.request))
 
-    @view_config(route_name='mocks', request_method='GET', renderer='templates/mock/mocks.jinja2', permission='view')
+    @view_config(route_name='mocks', request_method='POST', renderer='templates/mock/mocks.jinja2', permission='view')
     def mock_list_view(self):
         mocks = Mock.find_all()
 
@@ -135,13 +135,13 @@ class TweetView(object):
     def __init__(self, request):
         self.request = request
         self.user = User.find_by_id(authenticated_userid(self.request))
-        self.tweet_util = TweetUtil(self.user, request)
+        print('init')
+        self.tweet_util = TweetUtil(self.user)
 
     @view_config(route_name='token_auth', request_method='GET', permission='view', renderer='templates/tweet/token_auth.jinja2')
     def token_auth_view(self):
-        oauth_token = self.request.params.get('oauth_token')
         oauth_verifier = self.request.params.get('oauth_verifier')
-        self.tweet_util.auth_twitter_access_token(oauth_token, oauth_verifier, self.user)
+        self.tweet_util.auth_twitter_access_token(oauth_verifier, self.user)
 
         return HTTPFound(location=self.request.route_url('home'))
 
@@ -159,7 +159,7 @@ class AjaxAPI(object):
 
     @view_config(route_name='tweet_post_api', request_method='POST', permission='view', xhr=True, renderer="json")
     def tweet_post(self):
-        tweet_util = TweetUtil(self.user, self.request)
+        tweet_util = TweetUtil(self.user)
         tweet_util.post_tweet(self.request.params.get('text'))
 
         return Response('OK')
