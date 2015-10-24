@@ -4,6 +4,7 @@ from pyramid.threadlocal import get_current_registry
 
 
 class TweetUtil:
+    __instance = None
     __session = dict()
 
     def __init__(self, user):
@@ -13,6 +14,12 @@ class TweetUtil:
             print('init')
             self.__auth.set_access_token(user.twitter_access_token, user.twitter_access_token_secret)
             self.__api = tweepy.API(self.__auth)
+
+    def __new__(cls, *args, **kwargs):
+        if TweetUtil.__instance is None:
+            TweetUtil.__instance = object.__new__(cls)
+
+        return TweetUtil.__instance
 
     def get_authenticate_url(self):
         authenticate_url = self.__auth.get_authorization_url().replace('authorize', 'authenticate')
