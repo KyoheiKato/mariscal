@@ -135,7 +135,6 @@ class TweetView(object):
     def __init__(self, request):
         self.request = request
         self.user = User.find_by_id(authenticated_userid(self.request))
-        print('init')
         self.tweet_util = TweetUtil(self.user)
 
     @view_config(route_name='token_auth', request_method='GET', permission='view', renderer='templates/tweet/token_auth.jinja2')
